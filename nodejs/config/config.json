@@ -1,14 +1,11 @@
 {
   "development": {
-    "storage": "./database.sqlite3",
-    "dialect": "sqlite"
+    "use_env_variable": "DB_URI"
   },
   "test": {
-    "storage": "./database.sqlite3",
-    "dialect": "sqlite"
+    "use_env_variable": "DB_URI"
   },
   "production": {
-    "storage": "./database.sqlite3",
-    "dialect": "sqlite"
+    "use_env_variable": "DB_URI"
   }
 }
