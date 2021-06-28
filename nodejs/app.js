@@ -1,10 +1,12 @@
 require('dotenv').config();
 
-const { App } = require('@slack/bolt');
+const { App, ExpressReceiver } = require('@slack/bolt');
 
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(process.env.DB_URI);
+
+const receiver = new ExpressReceiver({ signingSecret: '' });
 
 const {
   shortcutsListener,
@@ -18,6 +20,7 @@ const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   socketMode: true,
   appToken: process.env.SLACK_APP_TOKEN,
+  // receiver,
 });
 
 shortcutsListener.globalNewTask(app);
@@ -32,6 +35,11 @@ actionsListener.blockAppHomeNavOpen(app);
 actionsListener.blockAppHomeNavCompleted(app);
 actionsListener.blockReopenTask(app);
 
+receiver.router.get('/', (req, res) => {
+  // You're working with an express req and res now.
+  res.sendStatus(200);
+});
+
 (async () => {
   try {
     await sequelize.authenticate();
@@ -42,6 +50,7 @@ actionsListener.blockReopenTask(app);
     console.log('Connection has been established successfully.');
     // Start your app
     await app.start();
+    await receiver.start(8080);
 
     // eslint-disable-next-line no-console
     console.log('⚡️ Bolt app is running!');
