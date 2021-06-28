@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "jest",
-    "lint": "eslint . --ext .js"
+    "lint": "eslint . --ext .js",
+    "migrate_and_start": "sequelize db:migrate; node app.js"
   },
   "repository": {
     "type": "git",
